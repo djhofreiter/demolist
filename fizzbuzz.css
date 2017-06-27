@@ -1,0 +1,17 @@
+ul{
+list-style-type:none;
+}
+
+li:nth-child(3n):before{
+  font-size:1em;
+  content:"Fizz";
+  color: green;
+  border: 1px dotted purple;
+  padding: 3px;
+}
+li:nth-child(5n):after{
+  font-size:2em;
+  color: red;
+  border: 2px solid blue;
+  content:"Buzz";
+}
