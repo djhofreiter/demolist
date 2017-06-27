@@ -2,15 +2,24 @@ ul{
 list-style-type:none;
 }
 
+li:nth-child(3n) {
+    visibility:hidden;
+}
+
+li:nth-child(5n) {
+    visibility:hidden;
+}
 li:nth-child(3n):before{
   font-size:1em;
+  visibility: visible;
   content:"Fizz";
   color: green;
   border: 1px dotted purple;
   padding: 3px;
 }
-li:nth-child(5n):after{
+li:nth-child(5n)::before{
   font-size:2em;
+  visibility: visible;
   color: red;
   border: 2px solid blue;
   content:"Buzz";
