@@ -2,13 +2,10 @@ ul{
 list-style-type:none;
 }
 
-li:nth-child(3n) {
-    visibility:hidden;
-}
-
 li:nth-child(5n) {
     visibility:hidden;
 }
+
 li:nth-child(3n):before{
   font-size:1em;
   visibility: visible;
@@ -16,8 +13,14 @@ li:nth-child(3n):before{
   color: green;
   border: 1px dotted purple;
   padding: 3px;
+  margin: 20px;
 }
-li:nth-child(5n)::before{
+
+li:nth-child(3n) {
+    visibility:hidden;
+}
+
+li:nth-child(5n):before{
   font-size:2em;
   visibility: visible;
   color: red;
