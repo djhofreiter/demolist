@@ -1,7 +1,8 @@
-result=0;
+
 
 window.onload = function display() {
-console.log(result);
+var funPress = document.getElementById("function");
+result=0;
 var display = document.getElementById("output");
 display.value = result;
 
@@ -20,6 +21,7 @@ numpress.addEventListener("click", function(event) {
     }
     display.value = result;
 });
+
 
 
 }
