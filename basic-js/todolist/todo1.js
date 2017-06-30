@@ -21,8 +21,3 @@ element.appendChild(object)
     })
 
 })
-
-function remove () {
-    element.removeChild(object);
-    
-}
