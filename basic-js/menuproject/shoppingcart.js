@@ -12,7 +12,7 @@ var burgerCount = 0
 function addItem() {
     console.log("test")
     var burgerCost = burgerCount * 5;
-    if (burgerCount == 0) {
+    if (burgerCount === 0) {
             burgerCount++
             cartList.innerText=burgerCount
     }
