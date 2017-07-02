@@ -7,19 +7,18 @@ var nachosCount = 0
 var softDrinkCount = 0
 var cartList = document.getElementById("cart")
 var itemCost = 0
+var burgerCount = 0
 
 function addItem() {
-    var burgerCount = 0
     console.log("test")
     var burgerCost = burgerCount * 5;
-    if (burgerCount > 0) {
+    if (burgerCount == 0) {
             burgerCount++
+            cartList.innerText=burgerCount
     }
-    else {
-        burgerCount++
-            cartList.appendChild(document.createTextNode(item[0].name))
-            cartList.appendChild(document.createTextNode(burgerCount))
-            cartList.appendChild(document.createTextNode(burgerCost))
+
+    if (burgerCount > 0) {
+        cartList.innerText="test"
     }
 
 }

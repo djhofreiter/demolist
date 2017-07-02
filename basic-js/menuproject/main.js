@@ -18,7 +18,7 @@ var addButton = document.createElement("button")
 addButton.innerHTML = "Add" // Assigns text to the button
 var lineSpacing = document.createElement("br")
 addButton.addEventListener("click",function(){
-    window.cart.addItem(i)
+    window.cart.addItem()
 })
 //Creates a subtract button
 var subtractButton = document.createElement("button")
@@ -45,7 +45,7 @@ var burgerCount = cart.burgerCount
 
 
 // Cart functions
-window.main = (function(cart) {
+window.mainCart = (function(cart) {
 // Makes cart function local and easier to read/write
 //var addItem = cart.addItem() 
 
