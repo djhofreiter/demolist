@@ -6,19 +6,28 @@ var chiliDogCount = 0
 var nachosCount = 0
 var softDrinkCount = 0
 var cartList = document.getElementById("cart")
+var cartItem = document.getElementById("cartItem")
+var cartCount = document.getElementById("cartCount")
+var cartCost = document.getElementById("cartCost")
 var itemCost = 0
 var burgerCount = 0
+var burgerCost = burgerCount * 5;
 
 function addItem() {
-    console.log("test")
-    var burgerCost = burgerCount * 5;
-    if (burgerCount === 0) {
+//    console.log("test")
+    if (burgerCount == 0) {
             burgerCount++
-            cartList.innerText=burgerCount
+            var burgerCost = burgerCount * 5;
+    cartItem.appendChild(document.createTextNode(item[0].name))
+    cartCount.appendChild(document.createTextNode(burgerCount))
+    cartCost.appendChild(document.createTextNode(burgerCost))
     }
 
-    if (burgerCount > 0) {
-        cartList.innerText="test"
+    else {
+        burgerCount++
+        var burgerCost = burgerCount * 5;
+        cartCount.innerText=burgerCount
+        cartCost.innerText = burgerCost
     }
 
 }
@@ -29,6 +38,21 @@ function updateItem () {
 
 }
 function removeItem () {
+    if (burgerCount == 1) {
+            burgerCount--
+    cartItem.removeChild(document.createTextNode(item[0].name))
+    cartCount.removeChild(document.createTextNode(burgerCount))
+    cartCost.removeChild(document.createTextNode(burgerCost))
+
+    }
+
+    if (burgerCount > 1) {
+        burgerCount--
+        var burgerCost = burgerCount * 5;
+        cartCount.innerText=burgerCount
+        cartCost.innerText = burgerCost
+    }
+
 
 }
 function getCart () {

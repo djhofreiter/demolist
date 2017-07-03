@@ -20,8 +20,12 @@ var lineSpacing = document.createElement("br")
 addButton.addEventListener("click",function(){
     window.cart.addItem()
 })
+
 //Creates a subtract button
 var subtractButton = document.createElement("button")
+subtractButton.addEventListener("click", function(){
+    window.cart.removeItem()
+})
 //Assigns text to button
 subtractButton.innerHTML = "Subtract"
 //populates web page with menu
