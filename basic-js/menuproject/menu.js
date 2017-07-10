@@ -1,18 +1,12 @@
-window.menu = (function() {
-// Creates private array of objects
-            var menuData = [
-        {"name": "Burger", "price": 4.99, "quantity": 0},
-        {"name": "Cheeseburger", "price": 5.49, "quantity": 0},
-        {"name": "Hot Dog", "price": 3.99, "quantity": 0},
-        {"name": "Chili Dog", "price": 4.49, "quantity": 0},
-        {"name": "Nachos", "price": 5.99, "quantity": 0},
-        {"name": "Soft Drink", "price": 1.99, "quantity": 0}
-            ]
-            
-    // public variables & functions
+function PopulateMenu() {
+var StartMenu = new Menu();
+StartMenu.AddFoodItem(new FoodItem("Burger",4.99));
+StartMenu.AddFoodItem(new FoodItem("Cheesebuger", 5.49));
+StartMenu.AddFoodItem(new FoodItem("Hot Dog", 3.99));
+StartMenu.AddFoodItem(new FoodItem("Chili Dog", 4.49));
+StartMenu.AddFoodItem(new FoodItem("Nachos", 5.99));
+StartMenu.AddFoodItem(new FoodItem("Soft Drink", 1.99));
+return StartMenu;
+}
 
-// Makes objects public
-    return {
-        menuItem: menuData
-    }
-})();
+window.menu = PopulateMenu();

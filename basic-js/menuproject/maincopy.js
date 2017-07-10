@@ -5,15 +5,12 @@ var c = console
 
 // Makes the modular variable local and easier to write
 var item = menu.menuItem;
+var StartingMenu=window.menu.menuItem;
 var menuList = document.getElementById("menu")
-var myCart = new Cart();
 
 // Inserts the menu onto the page
 function insertMenu() {
-for (i = 0; i < window.menu.length; i++) { //Goes through the array
-var MenuData = window.menu.FoodData[i];
-var tempCartItem = new CartItem(MenuData);
-
+for (i = 0; i < 6; ++i) { //Goes through the array
     //Creates an add button
 var addButton = document.createElement("button")
 // Assigns text to the button
@@ -24,8 +21,7 @@ addButton.setAttribute("class", "btn-success")
 var lineSpacing = document.createElement("br")
 //Executes function when button is clicked
 addButton.addEventListener("click",function(){
-    myCart.AddCartData(tempCartItem);
-    window.cart.updateDomFromCart();
+    window.cart.addItem()
 })
 
 //Creates a subtract button
@@ -36,18 +32,19 @@ subtractButton.innerHTML = "-"
 subtractButton.setAttribute("class", "btn-danger")
 //Executes function when clicked
 subtractButton.addEventListener("click", function(){
-    myCart.SubtractCartData(tempCartItem)
-    window.cart.updateDomFromCart()
+    window.cart.removeItem()
 })
 
+//Creates a variable which will assign a specific ID to each button
+var setClass = document.getElementsByTagName("button") + i
 //populates web page with menu
-    document.getElementById("menu").appendChild(document.createTextNode(MenuData.name))
-    document.getElementById("menu").appendChild(lineSpacing)
-    document.getElementById("menucost").appendChild(document.createTextNode(MenuData.price))
-    document.getElementById("menucost").appendChild(lineSpacing)
-    document.getElementById("addremove").appendChild(addButton);
-    document.getElementById("addremove").appendChild(subtractButton)
-    document.getElementById("addremove").appendChild(lineSpacing)
+    menuList.appendChild(document.createTextNode(item[i].name))
+    menuList.appendChild(lineSpacing)
+    menuList.appendChild(document.createTextNode(item[i].price))
+    menuList.appendChild(lineSpacing)
+    menuList.appendChild(addButton);
+    menuList.appendChild(subtractButton)
+    document.getElementsByTagName("button")[i].setAttribute("id", setClass)
     menuList.appendChild(document.createElement("p"))
 // document.getElementById("main").appendChild (itemName[i].name)
 }
@@ -55,11 +52,12 @@ subtractButton.addEventListener("click", function(){
 
 }
 
-insertMenu()
+Menu();
 
 
 
-})(window.menu || (window.menu) ); //IIFE function
+})(window.menu || (window.cart) ); //IIFE function
+var burgerCount = cart.burgerCount
 
 
 // Cart functions
