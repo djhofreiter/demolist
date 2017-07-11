@@ -4,8 +4,30 @@ font-size: 2em;
 color: #7f2030;
 }
 
-#menu, #menuitemtitle, #menucosttitle, #menucost, #addremove, #addsubtractitem{
+#menu, #menuitemtitle, #menucosttitle, #addsubtractitem{
 background-color: darkkhaki;
+max-width: 100%; 
+vertical-align: bottom;
+font-size:1em;
+
+}
+
+body {
+    background-color: #dddddd
+}
+
+#menucost{
+background-color: darkkhaki;
+max-width: 100%; 
+vertical-align: bottom;
+font-size:21px;
+}
+
+#addremove {
+background-color: darkkhaki;
+max-width: 100%; 
+vertical-align: bottom;
+font-size:17px;
 }
 
 #carttitle{
@@ -15,5 +37,11 @@ background-color: darkkhaki;
 
 #cartitemtitle, #cartitemcost, #cartitemquantity, #cartItem, #cartCount, #cartCost {
     background-color: greenyellow;
+    max-width: 100%; 
+height: auto;
+display: block;
 }
 
+body, html, .container-fluid {
+     height: 100%;
+}
