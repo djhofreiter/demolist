@@ -15,7 +15,6 @@ function AppSetup()
 function InsertMenu(menuObj, cartObj)
 {
     var cartList = document.getElementById("cart");
-
     var cartItem = document.getElementById("cartItem");
     var cartCount = document.getElementById("cartCount");
     var cartCost = document.getElementById("cartCost");
@@ -103,7 +102,6 @@ function UpdateDomFromCart(updateFromThisCart, cartItemNode, cartCountNode, cart
         cartCostNode.appendChild(document.createTextNode(updateFromThisCart.CartData[i].TotalItemCost().toFixed(2)));
         cartCostNode.appendChild(document.createElement("br"));
     }
-
+    //Inserts the total cost. Limits to 2 decimal places
     totalCostNode.appendChild(document.createTextNode(updateFromThisCart.TotalCost().toFixed(2)));
 }
-

@@ -16,6 +16,7 @@ function CartItem(desiredItem) {
     };
 }
 
+//Creates a shopper class
 function Shopper(shopperName){
     document.getElementById("shopperName").appendChild(document.createTextNode(shopperName))
 }
@@ -27,7 +28,7 @@ function Cart() {
 
 //Adds an item to the cart
     this.AddCartData = function (newCartItem) {
-        //Looks for the item to see if it's in the cart's array already
+        //Looks to see if the desired item matches the item of the same name already in cart
         var Item = this.CartData.find(function (searchedCartItem)
         {
             return searchedCartItem.DesiredItem.Name === newCartItem.DesiredItem.Name;
