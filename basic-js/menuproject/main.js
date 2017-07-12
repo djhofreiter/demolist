@@ -8,6 +8,7 @@ function AppSetup()
     var menu = PopulateMenu();
 
     Shopper("DefaultUser");
+    
     InsertMenu(menu,myCart);
 }
 

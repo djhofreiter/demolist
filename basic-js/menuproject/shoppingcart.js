@@ -28,7 +28,7 @@ function Cart() {
 
 //Adds an item to the cart
     this.AddCartData = function (newCartItem) {
-        //Looks to see if the desired item matches the item of the same name already in cart
+        //Sets the index of where the desired item is in the cart
         var Item = this.CartData.find(function (searchedCartItem)
         {
             return searchedCartItem.DesiredItem.Name === newCartItem.DesiredItem.Name;
@@ -46,7 +46,7 @@ function Cart() {
 
 //Removes item from the cart
     this.SubtractCartData = function (cartItem) {
-        //Assigns item name to item variable to be found later in the cart array
+        //Assigns index for where an item is in the cart's array
         var item = this.CartData.find(function (searchedCartItem)
         {
             return searchedCartItem.DesiredItem.Name === cartItem.DesiredItem.Name;
