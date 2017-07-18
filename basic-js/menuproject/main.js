@@ -1,6 +1,210 @@
 window.onload = AppSetup;
 
 function AppSetup()
+    {
+        //Creates a new cart from the cart "class"
+        var myCart = new Cart();
+        //pushes the food data into the menu
+        var menu = PopulateMenu();
+
+        Shopper("DefaultUser");
+    
+        InsertMenu(menu,myCart);
+
+    }
+
+var cartItem = document.getElementById("cartItem");
+
+
+// Inserts the menu onto the page
+function InsertMenu(menuObj, cartObj)
+    {
+        var cartList = document.getElementById("cart");
+        var cartCount = document.getElementById("cartCount");
+        var cartCost = document.getElementById("cartCost");
+        var cartTotalCost = document.getElementById("totalcost");
+        var menuList = document.getElementById("menu");
+        var menuTitleNode = document.getElementById("menu");
+        var menuCostNode = document.getElementById("menucost");
+        var arButtonNode = document.getElementById("addremove");
+
+
+        var menuParentNode = document.querySelector('#menu');
+
+
+            if (document.body.addEventListener){
+                document.body.addEventListener('click',yourHandler,false);
+            }
+                else{
+                    document.body.attachEvent('onclick',yourHandler);//for IE
+                }
+
+
+function yourHandler(e){
+    e = e || window.event;
+    var target = e.target || e.srcElement;
+    if (target.className.match(/keyword/))
+    {
+        //an element with the keyword Class was clicked
+    }
+}
+
+
+function menuAddItem() {
+    for (var i=0; i<menuParentNode.children.length; i++) {
+        var menuChildElement = menuParentNode.children[i];
+        
+            childElement.addEventListener("click", function(){
+                cartObj.AddCartData(new CartItem(tempMenuItem));
+                UpdateDomFromCart(cartObj, cartItem, cartCount, cartCost, cartTotalCost);
+            })
+        }
+    }
+
+
+    for (i = 0; i < menuObj.FoodData.length; i++)
+    { 
+      //Goes through the menu array   
+        menuData = menuObj.FoodData[i];
+        //Creates an add button
+        var addButton = document.createElement("button");
+        // Assigns text to the button
+        addButton.innerHTML = "+";
+        //Uses bootstrap to make a green button
+        addButton.setAttribute("class", "btn-success");
+        addButton.setAttribute("id", "addMenuButton" + i);
+    
+        //Executes function when button is clicked
+        function AddHandler(index) {
+            //Makes it easier to find the menu item in the array
+            var tempMenuItem = menuObj.FoodData[index];
+
+            addButton.addEventListener("click", function ()
+            {
+                //Pushes the menu item into the cart array
+                cartObj.AddCartData(new CartItem(tempMenuItem));
+                //Refreshes the Dom with new data every time the count changes
+                UpdateDomFromCart(cartObj, cartItem, cartCount, cartCost, cartTotalCost);
+            });
+        }
+        //links the Add button handler to the food data in the menu array
+        AddHandler(i);
+
+
+        function createIndex(IDString) {
+
+            var txt = addButton.getAttribute("id")
+            var numb = txt.match(/\d/g);
+            numb = numb.join("");
+            console.log(numb);
+            }
+
+        var menuParentNode = document.querySelector('#menu');
+/*        menuParentNode.addEventListener("click", AddCartData, false);
+
+            function menuAddItem() {
+                for (var i=0; i<menuParentNode.children.length; i++) {
+                    var menuChildElement = menuParentNode.children[i];
+                    childElement.addEventListener("click", function(){
+                    cartObj.AddCartData(new CartItem(tempMenuItem));
+                    UpdateDomFromCart(cartObj, cartItem, cartCount, cartCost, cartTotalCost);
+                    })
+                }
+            }
+*/
+        //Creates a subtract button
+        var subtractButton = document.createElement("button");
+        //Assigns text to button
+        subtractButton.innerHTML = "-";
+        //Leverages bootstrap to make a red button
+        subtractButton.setAttribute("class", "btn-danger");
+        //Executes function when clicked
+
+        function SubtractHandler(index)
+        {
+            var tempMenuItem = menuObj.FoodData[index];
+
+            subtractButton.addEventListener("click", function () {
+                cartObj.SubtractCartData(new CartItem(tempMenuItem));
+                UpdateDomFromCart(cartObj, cartItem, cartCount, cartCost, cartTotalCost);
+            });
+        }
+
+        SubtractHandler(i);
+
+        //populates menu
+        menuList.appendChild(document.createElement("li"))
+        menuList.appendChild(document.createTextNode(menuData.Name));
+        menuList.appendChild(addButton);
+        menuList.appendChild(subtractButton);
+        menuList.appendChild(document.createElement("br"));
+        menuList.appendChild(document.createTextNode(menuData.Cost));
+        createIndex(i)
+    }
+}
+
+function UpdateDomFromCart(updateFromThisCart, cartItemNode, cartCountNode, cartCostNode, totalCostNode)
+{
+    //Clears out the text to refresh the information
+    cartItemNode.innerHTML = "";
+    totalCostNode.innerHTML = "";
+
+    //Cycles through the cart array and updates the cart on the right side of the screen
+    for (i = 0; i < updateFromThisCart.CartData.length; i++)
+    {
+        var addButton = document.createElement("button");
+        // Assigns text to the button
+        addButton.innerHTML = "+";
+        //Uses bootstrap to make a green button
+        addButton.setAttribute("class", "btn-success");
+        addButton.setAttribute("id", "addCartButton" + i);
+    
+        //Creates a subtract button
+        var subtractButton = document.createElement("button");
+        //Assigns text to button
+        subtractButton.innerHTML = "-";
+        //Leverages bootstrap to make a red button
+        subtractButton.setAttribute("class", "btn-danger");
+        subtractButton.setAttribute("id", "subtractCartButton" + i)
+
+        cartItem.appendChild(document.createTextNode(updateFromThisCart.CartData[i].DesiredItem.Name));
+        cartItem.appendChild(document.createTextNode(updateFromThisCart.CartData[i].Quantity));
+        cartItem.appendChild(addButton);
+        cartItem.appendChild(subtractButton);
+        cartItem.appendChild(document.createElement("br"));
+        cartItem.appendChild(document.createTextNode(updateFromThisCart.CartData[i].TotalItemCost().toFixed(2)));
+        cartItem.appendChild(document.createElement("br"));
+    }
+    //Inserts the total cost. Limits to 2 decimal places
+    totalCostNode.appendChild(document.createTextNode(updateFromThisCart.TotalCost().toFixed(2)));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+window.onload = AppSetup;
+
+function AppSetup()
 {
     //Creates a new cart from the cart "class"
     var myCart = new Cart();
@@ -105,4 +309,4 @@ function UpdateDomFromCart(updateFromThisCart, cartItemNode, cartCountNode, cart
     }
     //Inserts the total cost. Limits to 2 decimal places
     totalCostNode.appendChild(document.createTextNode(updateFromThisCart.TotalCost().toFixed(2)));
-}
+}*/

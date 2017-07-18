@@ -9,6 +9,7 @@ background-color: darkkhaki;
 max-width: 100%; 
 vertical-align: bottom;
 font-size:1em;
+overflow:auto;
 
 }
 
@@ -30,9 +31,25 @@ vertical-align: bottom;
 font-size:17px;
 }
 
+.btn-success {
+    margin-right: 20px;
+    position: absolute;
+    right: 20px;
+}
+
+.btn-danger {
+    position:absolute;
+    right:20px;
+
+}
+
+#menu>button{
+    position: absolute;
+    right: 20px;
+}
+
 #carttitle{
     background-color: lightgreen;
-    font-size: 2em;
 }
 
 #cartitemtitle, #cartitemcost, #cartitemquantity, #cartItem, #cartCount, #cartCost {
