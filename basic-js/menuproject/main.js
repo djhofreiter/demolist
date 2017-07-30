@@ -1,19 +1,35 @@
+var xhr = new XMLHttpRequest;
+var cartApiUrl = 'http://localhost/MenuWebAPI/api/Cart';
+var c = console;
+
 window.onload = AppSetup;
 
+
+    
 function AppSetup()
     {
-        //Creates a new cart from the cart "class"
-        var myCart = new Cart();
-        //pushes the food data into the menu
-        var menu = PopulateMenu();
+/*        xhr.onreadystatechange = function() 
+        {
+            if (xhr.readyState == 4 && xhr.status == 200) 
+                {
+            
+                }
+        }
 
-        Shopper("DefaultUser");
+        xhr.open("GET", cartApiUrl, true);
+        xhr.send();
+*/
+
+    //Creates a new cart from the cart "class"
+                var myCart = new Cart();
+            //pushes the food data into the menu
+                var menu = PopulateMenu();
     
-        InsertMenu(menu,myCart);
+                Shopper("DefaultUser");
+                InsertMenu(menu,myCart);
+var cartItem = document.getElementById("cartItem");
 
     }
-
-var cartItem = document.getElementById("cartItem");
 
 
 // Inserts the menu onto the page
@@ -31,35 +47,6 @@ function InsertMenu(menuObj, cartObj)
 
         var menuParentNode = document.querySelector('#menu');
 
-
-            if (document.body.addEventListener){
-                document.body.addEventListener('click',yourHandler,false);
-            }
-                else{
-                    document.body.attachEvent('onclick',yourHandler);//for IE
-                }
-
-
-function yourHandler(e){
-    e = e || window.event;
-    var target = e.target || e.srcElement;
-    if (target.className.match(/keyword/))
-    {
-        //an element with the keyword Class was clicked
-    }
-}
-
-
-function menuAddItem() {
-    for (var i=0; i<menuParentNode.children.length; i++) {
-        var menuChildElement = menuParentNode.children[i];
-        
-            childElement.addEventListener("click", function(){
-                cartObj.AddCartData(new CartItem(tempMenuItem));
-                UpdateDomFromCart(cartObj, cartItem, cartCount, cartCost, cartTotalCost);
-            })
-        }
-    }
 
 
     for (i = 0; i < menuObj.FoodData.length; i++)
@@ -99,18 +86,16 @@ function menuAddItem() {
             console.log(numb);
             }
 
-        var menuParentNode = document.querySelector('#menu');
-/*        menuParentNode.addEventListener("click", AddCartData, false);
-
-            function menuAddItem() {
-                for (var i=0; i<menuParentNode.children.length; i++) {
-                    var menuChildElement = menuParentNode.children[i];
-                    childElement.addEventListener("click", function(){
-                    cartObj.AddCartData(new CartItem(tempMenuItem));
-                    UpdateDomFromCart(cartObj, cartItem, cartCount, cartCost, cartTotalCost);
-                    })
+/*var addBtn = document.getElementsByClassName("btn-success");
+            document.addEventListener("click", function(index){
+                if (event.target===addBtn) {
+                    var tempMenuItem = menuObj.FoodData[index];
+            //Pushes the menu item into the cart array
+                cartObj.AddCartData(new CartItem(tempMenuItem));
+                //Refreshes the Dom with new data every time the count changes
+                UpdateDomFromCart(cartObj, cartItem, cartCount, cartCost, cartTotalCost);
                 }
-            }
+        })        
 */
         //Creates a subtract button
         var subtractButton = document.createElement("button");
@@ -143,9 +128,86 @@ function menuAddItem() {
     }
 }
 
+
+
 function UpdateDomFromCart(updateFromThisCart, cartItemNode, cartCountNode, cartCostNode, totalCostNode)
 {
     //Clears out the text to refresh the information
+    cartItemNode.innerHTML = "";
+    totalCostNode.innerHTML = "";
+
+xhr.onreadystatechange = function() 
+    {
+        if (xhr.readyState == 4 && xhr.status == 200) 
+            {
+            var data = xhr.responseText;
+            c.log(data);
+            c.log(JSON.parse(data));
+            var cartArray = JSON.parse(data)
+
+
+    //Cycles through the cart array and updates the cart on the right side of the screen
+    for (i = 0; i < updateFromThisCart.CartData.length; i++)
+                {
+        var addButton = document.createElement("button");
+        // Assigns text to the button
+        addButton.innerHTML = "+";
+        //Uses bootstrap to make a green button
+        addButton.setAttribute("class", "btn-success");
+        addButton.setAttribute("id", "addCartButton" + i);
+    
+        //Creates a subtract button
+        var subtractButton = document.createElement("button");
+        //Assigns text to button
+        subtractButton.innerHTML = "-";
+        //Leverages bootstrap to make a red button
+        subtractButton.setAttribute("class", "btn-danger");
+        subtractButton.setAttribute("id", "subtractCartButton" + i)
+
+        cartItem.appendChild(document.createTextNode(updateFromThisCart.CartData[i].DesiredItem.Name));
+        cartItem.appendChild(document.createElement("span"))
+        cartItem.appendChild(document.createTextNode(updateFromThisCart.CartData[i].Quantity));
+        cartItem.appendChild(addButton);
+        cartItem.appendChild(subtractButton);
+        cartItem.appendChild(document.createElement("br"));
+        cartItem.appendChild(document.createTextNode(updateFromThisCart.CartData[i].TotalItemCost().toFixed(2)));
+        cartItem.appendChild(document.createElement("br"));
+                }
+    //Inserts the total cost. Limits to 2 decimal places
+    totalCostNode.appendChild(document.createTextNode(updateFromThisCart.TotalCost().toFixed(2)));
+
+        }                
+    }
+
+    xhr.open("GET", cartApiUrl, true);
+    xhr.send();
+
+}
+
+var cartTag = document.getElementById("updateCart")
+var cartButton = document.createElement("button")
+cartTag.appendChild(cartButton)
+cartButton.innerHTML="Update"
+
+
+
+
+/*        var c = console
+var menuApiUrl = 'http://localhost/MenuWebAPI/api/Cart';
+var xhr = new XMLHttpRequest()
+
+
+xhr.onreadystatechange = function() 
+    {
+        if (xhr.readyState == 4 && xhr.status == 200) 
+            {
+            var data = xhr.responseText;
+            c.log(data);
+            c.log(JSON.parse(data));
+            var cartArray = JSON.parse(data)
+                
+
+                //Clears out the text to refresh the information
     cartItemNode.innerHTML = "";
     totalCostNode.innerHTML = "";
 
@@ -167,26 +229,37 @@ function UpdateDomFromCart(updateFromThisCart, cartItemNode, cartCountNode, cart
         subtractButton.setAttribute("class", "btn-danger");
         subtractButton.setAttribute("id", "subtractCartButton" + i)
 
-        cartItem.appendChild(document.createTextNode(updateFromThisCart.CartData[i].DesiredItem.Name));
-        cartItem.appendChild(document.createTextNode(updateFromThisCart.CartData[i].Quantity));
+        cartItem.appendChild(document.createTextNode(updateFromThisCart.CartData(cartArray[i]).DesiredItem.Name));
+        cartItem.appendChild(document.createTextNode(cartItemQuantity));
         cartItem.appendChild(addButton);
         cartItem.appendChild(subtractButton);
         cartItem.appendChild(document.createElement("br"));
-        cartItem.appendChild(document.createTextNode(updateFromThisCart.CartData[i].TotalItemCost().toFixed(2)));
+        cartItem.appendChild(document.createTextNode(cartItemCost));
         cartItem.appendChild(document.createElement("br"));
     }
     //Inserts the total cost. Limits to 2 decimal places
     totalCostNode.appendChild(document.createTextNode(updateFromThisCart.TotalCost().toFixed(2)));
+
+
+
+
+
+
+                for (i=0; i<cartArray.length; i++) 
+                    {
+                        var cartItemName = cartArray[i].name;
+                        var cartItemCost = cartArray[i].cost;
+                        var cartItemQuantity = cartArray[i].quantity
+                        //The array length
+                    c.log(cartItemName + " " + cartItemCost + "  " + cartItemQuantity)
+                    }
+            }                
+    }
+
+    xhr.open("GET", cartApiUrl, true);
+    xhr.send();
 }
-
-
-
-
-
-
-
-
-
+*/
 
 
 
