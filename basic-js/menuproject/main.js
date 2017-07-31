@@ -1,66 +1,114 @@
-var xhr = new XMLHttpRequest;
-var cartApiUrl = 'http://localhost/MenuWebAPI/api/Cart';
+'use strict';
+
+(window.main = function(User, Menu, Cart) {
+//Declaring variables
 var c = console;
+var menuList = document.getElementById("menu");
+var cartList = document.getElementById("cart");
 
-window.onload = AppSetup;
+
+window.onload = AppSetup();
 
 
-    
+
 function AppSetup()
+{
+
+//Creates a list item to be appended to a menu item
+    function CreateListItem (listItemName, listItemCost, listItemQuantity)
     {
-/*        xhr.onreadystatechange = function() 
-        {
-            if (xhr.readyState == 4 && xhr.status == 200) 
-                {
-            
-                }
-        }
+        var li = document.createElement("li");
+        var foodName = document.createTextNode(listItemName)
+        var foodCost = document.createTextNode(listItemCost)
+        foodCost.style="float:right;"
+        var listSpacer = document.createElement("span")
+        
 
-        xhr.open("GET", cartApiUrl, true);
-        xhr.send();
-*/
+            li.appendChild(foodName)
+            li.appendChild(listSpacer)
+            li.appendChild(foodCost)
 
-    //Creates a new cart from the cart "class"
-                var myCart = new Cart();
-            //pushes the food data into the menu
-                var menu = PopulateMenu();
-    
-                Shopper("DefaultUser");
-                InsertMenu(menu,myCart);
-var cartItem = document.getElementById("cartItem");
-
+        return li;
     }
 
-
-// Inserts the menu onto the page
-function InsertMenu(menuObj, cartObj)
+//Creates a menu item to be appended to the PopulateMenu function
+    function MenuListItem (itemName, itemCost)
     {
-        var cartList = document.getElementById("cart");
-        var cartCount = document.getElementById("cartCount");
-        var cartCost = document.getElementById("cartCost");
-        var cartTotalCost = document.getElementById("totalcost");
-        var menuList = document.getElementById("menu");
-        var menuTitleNode = document.getElementById("menu");
-        var menuCostNode = document.getElementById("menucost");
-        var arButtonNode = document.getElementById("addremove");
-
-
-        var menuParentNode = document.querySelector('#menu');
-
-
-
-    for (i = 0; i < menuObj.FoodData.length; i++)
-    { 
-      //Goes through the menu array   
-        menuData = menuObj.FoodData[i];
-        //Creates an add button
+        var MenuLi = CreateListItem(itemName, itemCost, 1)
         var addButton = document.createElement("button");
         // Assigns text to the button
         addButton.innerHTML = "+";
         //Uses bootstrap to make a green button
         addButton.setAttribute("class", "btn-success");
-        addButton.setAttribute("id", "addMenuButton" + i);
+        //Creates a subtract button
+        var subtractButton = document.createElement("button");
+        //Assigns text to button
+        subtractButton.innerHTML = "-";
+        //Leverages bootstrap to make a red button
+        subtractButton.setAttribute("class", "btn-danger");
+
+            MenuLi.appendChild(addButton)
+            MenuLi.appendChild(subtractButton)
+
+        return MenuLi;
+
+    }
+
     
+    Menu.PopulateMenu(function(data)
+    {
+        for (var i=0; i<data.length; i++){
+        menuList.appendChild(MenuListItem(data[i].name, data[i].cost))
+        }
+    });
+    
+
+    function CartListItem(itemName, itemCost, itemQuantity)
+    {
+        var CartLi = CreateListItem(itemName, itemCost, itemQuantity)
+        var addButton = document.createElement("button");
+        addButton.innerHTML = "+";
+        addButton.setAttribute("class", "btn-success");
+        var subtractButton = document.createElement("button");
+        subtractButton.innerHTML = "-";
+        subtractButton.setAttribute("class", "btn-danger");
+
+            CartLi.appendChild(addButton)
+            CartLi.appendChild(subtractButton)
+    }
+
+    
+    Cart.LoadCart(function(data)
+    {
+        for (var i=0; i < data.length; i++) {
+            cartList.appendChild(CartListItem(data[i].name, data[i].cost, data[i].Quantity))
+        }
+    })
+    
+
+    /*
+    Incomplete
+
+    addButton.addEventListener("click", function()
+    {
+        var ItemToBeAdded = something;
+    })
+
+    subtractButton.addEventListener("click", function()
+    {
+
+    })
+*/
+
+
+// Inserts the menu onto the page -- No longer works
+// Keeping visible for ideas on eventlisteners
+function InsertMenu(menuObj, cartObj)
+    {
+
+    for (i = 0; i < menuObj.FoodData.length; i++)
+    { 
+      
         //Executes function when button is clicked
         function AddHandler(index) {
             //Makes it easier to find the menu item in the array
@@ -77,34 +125,6 @@ function InsertMenu(menuObj, cartObj)
         //links the Add button handler to the food data in the menu array
         AddHandler(i);
 
-
-        function createIndex(IDString) {
-
-            var txt = addButton.getAttribute("id")
-            var numb = txt.match(/\d/g);
-            numb = numb.join("");
-            console.log(numb);
-            }
-
-/*var addBtn = document.getElementsByClassName("btn-success");
-            document.addEventListener("click", function(index){
-                if (event.target===addBtn) {
-                    var tempMenuItem = menuObj.FoodData[index];
-            //Pushes the menu item into the cart array
-                cartObj.AddCartData(new CartItem(tempMenuItem));
-                //Refreshes the Dom with new data every time the count changes
-                UpdateDomFromCart(cartObj, cartItem, cartCount, cartCost, cartTotalCost);
-                }
-        })        
-*/
-        //Creates a subtract button
-        var subtractButton = document.createElement("button");
-        //Assigns text to button
-        subtractButton.innerHTML = "-";
-        //Leverages bootstrap to make a red button
-        subtractButton.setAttribute("class", "btn-danger");
-        //Executes function when clicked
-
         function SubtractHandler(index)
         {
             var tempMenuItem = menuObj.FoodData[index];
@@ -116,270 +136,11 @@ function InsertMenu(menuObj, cartObj)
         }
 
         SubtractHandler(i);
-
-        //populates menu
-        menuList.appendChild(document.createElement("li"))
-        menuList.appendChild(document.createTextNode(menuData.Name));
-        menuList.appendChild(addButton);
-        menuList.appendChild(subtractButton);
-        menuList.appendChild(document.createElement("br"));
-        menuList.appendChild(document.createTextNode(menuData.Cost));
-        createIndex(i)
     }
 }
 
 
 
-function UpdateDomFromCart(updateFromThisCart, cartItemNode, cartCountNode, cartCostNode, totalCostNode)
-{
-    //Clears out the text to refresh the information
-    cartItemNode.innerHTML = "";
-    totalCostNode.innerHTML = "";
-
-xhr.onreadystatechange = function() 
-    {
-        if (xhr.readyState == 4 && xhr.status == 200) 
-            {
-            var data = xhr.responseText;
-            c.log(data);
-            c.log(JSON.parse(data));
-            var cartArray = JSON.parse(data)
-
-
-    //Cycles through the cart array and updates the cart on the right side of the screen
-    for (i = 0; i < updateFromThisCart.CartData.length; i++)
-                {
-        var addButton = document.createElement("button");
-        // Assigns text to the button
-        addButton.innerHTML = "+";
-        //Uses bootstrap to make a green button
-        addButton.setAttribute("class", "btn-success");
-        addButton.setAttribute("id", "addCartButton" + i);
-    
-        //Creates a subtract button
-        var subtractButton = document.createElement("button");
-        //Assigns text to button
-        subtractButton.innerHTML = "-";
-        //Leverages bootstrap to make a red button
-        subtractButton.setAttribute("class", "btn-danger");
-        subtractButton.setAttribute("id", "subtractCartButton" + i)
-
-        cartItem.appendChild(document.createTextNode(updateFromThisCart.CartData[i].DesiredItem.Name));
-        cartItem.appendChild(document.createElement("span"))
-        cartItem.appendChild(document.createTextNode(updateFromThisCart.CartData[i].Quantity));
-        cartItem.appendChild(addButton);
-        cartItem.appendChild(subtractButton);
-        cartItem.appendChild(document.createElement("br"));
-        cartItem.appendChild(document.createTextNode(updateFromThisCart.CartData[i].TotalItemCost().toFixed(2)));
-        cartItem.appendChild(document.createElement("br"));
-                }
-    //Inserts the total cost. Limits to 2 decimal places
-    totalCostNode.appendChild(document.createTextNode(updateFromThisCart.TotalCost().toFixed(2)));
-
-        }                
-    }
-
-    xhr.open("GET", cartApiUrl, true);
-    xhr.send();
 
 }
-
-var cartTag = document.getElementById("updateCart")
-var cartButton = document.createElement("button")
-cartTag.appendChild(cartButton)
-cartButton.innerHTML="Update"
-
-
-
-
-/*        var c = console
-var menuApiUrl = 'http://localhost/MenuWebAPI/api/Cart';
-var xhr = new XMLHttpRequest()
-
-
-xhr.onreadystatechange = function() 
-    {
-        if (xhr.readyState == 4 && xhr.status == 200) 
-            {
-            var data = xhr.responseText;
-            c.log(data);
-            c.log(JSON.parse(data));
-            var cartArray = JSON.parse(data)
-                
-
-                //Clears out the text to refresh the information
-    cartItemNode.innerHTML = "";
-    totalCostNode.innerHTML = "";
-
-    //Cycles through the cart array and updates the cart on the right side of the screen
-    for (i = 0; i < updateFromThisCart.CartData.length; i++)
-    {
-        var addButton = document.createElement("button");
-        // Assigns text to the button
-        addButton.innerHTML = "+";
-        //Uses bootstrap to make a green button
-        addButton.setAttribute("class", "btn-success");
-        addButton.setAttribute("id", "addCartButton" + i);
-    
-        //Creates a subtract button
-        var subtractButton = document.createElement("button");
-        //Assigns text to button
-        subtractButton.innerHTML = "-";
-        //Leverages bootstrap to make a red button
-        subtractButton.setAttribute("class", "btn-danger");
-        subtractButton.setAttribute("id", "subtractCartButton" + i)
-
-        cartItem.appendChild(document.createTextNode(updateFromThisCart.CartData(cartArray[i]).DesiredItem.Name));
-        cartItem.appendChild(document.createTextNode(cartItemQuantity));
-        cartItem.appendChild(addButton);
-        cartItem.appendChild(subtractButton);
-        cartItem.appendChild(document.createElement("br"));
-        cartItem.appendChild(document.createTextNode(cartItemCost));
-        cartItem.appendChild(document.createElement("br"));
-    }
-    //Inserts the total cost. Limits to 2 decimal places
-    totalCostNode.appendChild(document.createTextNode(updateFromThisCart.TotalCost().toFixed(2)));
-
-
-
-
-
-
-                for (i=0; i<cartArray.length; i++) 
-                    {
-                        var cartItemName = cartArray[i].name;
-                        var cartItemCost = cartArray[i].cost;
-                        var cartItemQuantity = cartArray[i].quantity
-                        //The array length
-                    c.log(cartItemName + " " + cartItemCost + "  " + cartItemQuantity)
-                    }
-            }                
-    }
-
-    xhr.open("GET", cartApiUrl, true);
-    xhr.send();
-}
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-window.onload = AppSetup;
-
-function AppSetup()
-{
-    //Creates a new cart from the cart "class"
-    var myCart = new Cart();
-    //pushes the food data into the menu
-    var menu = PopulateMenu();
-
-    Shopper("DefaultUser");
-    
-    InsertMenu(menu,myCart);
-}
-
-// Inserts the menu onto the page
-function InsertMenu(menuObj, cartObj)
-{
-    var cartList = document.getElementById("cart");
-    var cartItem = document.getElementById("cartItem");
-    var cartCount = document.getElementById("cartCount");
-    var cartCost = document.getElementById("cartCost");
-    var cartTotalCost = document.getElementById("totalcost");
-    var menuList = document.getElementById("menu");
-    var menuTitleNode = document.getElementById("menu");
-    var menuCostNode = document.getElementById("menucost");
-    var arButtonNode = document.getElementById("addremove");
-
-
-
-    for (i = 0; i < menuObj.FoodData.length; i++)
-    { 
-      //Goes through the menu array   
-        menuData = menuObj.FoodData[i];
-        //Creates an add button
-        var addButton = document.createElement("button");
-        // Assigns text to the button
-        addButton.innerHTML = "+";
-        //Leverages bootstrap to make a green button
-        addButton.setAttribute("class", "btn-success");
-    
-        //Executes function when button is clicked
-        function AddHandler(index) {
-            //Makes it easier to find the menu item in the array
-            var tempMenuItem = menuObj.FoodData[index];
-
-            addButton.addEventListener("click", function ()
-            {
-                //Pushes the menu item into the cart array
-                cartObj.AddCartData(new CartItem(tempMenuItem));
-                //Refreshes the Dom with new data every time the count changes
-                UpdateDomFromCart(cartObj, cartItem, cartCount, cartCost, cartTotalCost);
-            });
-        }
-        //links the Add button handler to the food data in the menu array
-        AddHandler(i);
-
-        //Creates a subtract button
-        var subtractButton = document.createElement("button");
-        //Assigns text to button
-        subtractButton.innerHTML = "-";
-        //Leverages bootstrap to make a red button
-        subtractButton.setAttribute("class", "btn-danger");
-        //Executes function when clicked
-
-        function SubtractHandler(index)
-        {
-            var tempMenuItem = menuObj.FoodData[index];
-
-            subtractButton.addEventListener("click", function () {
-                cartObj.SubtractCartData(new CartItem(tempMenuItem));
-                UpdateDomFromCart(cartObj, cartItem, cartCount, cartCost, cartTotalCost);
-            });
-        }
-
-        SubtractHandler(i);
-
-        //populates menu
-        menuTitleNode.appendChild(document.createTextNode(menuData.Name));
-        menuCostNode.appendChild(document.createTextNode(menuData.Cost));
-        menuCostNode.appendChild(document.createElement("br"));
-        arButtonNode.appendChild(addButton);
-        arButtonNode.appendChild(subtractButton);
-        arButtonNode.appendChild(document.createElement("br"));
-        menuList.appendChild(document.createElement("p"));
-    }
-}
-
-function UpdateDomFromCart(updateFromThisCart, cartItemNode, cartCountNode, cartCostNode, totalCostNode)
-{
-    //Clears out the text to refresh the information
-    cartItemNode.innerHTML = "";
-    cartCountNode.innerHTML = "";
-    cartCostNode.innerHTML = "";
-    totalCostNode.innerHTML = "";
-
-    //Cycles through the cart array and updates the cart on the right side of the screen
-    for (i = 0; i < updateFromThisCart.CartData.length; i++)
-    {
-        cartItemNode.appendChild(document.createTextNode(updateFromThisCart.CartData[i].DesiredItem.Name));
-        cartItemNode.appendChild(document.createElement("br"));
-        cartCountNode.appendChild(document.createTextNode(updateFromThisCart.CartData[i].Quantity));
-        cartCountNode.appendChild(document.createElement("br"));
-        cartCostNode.appendChild(document.createTextNode(updateFromThisCart.CartData[i].TotalItemCost().toFixed(2)));
-        cartCostNode.appendChild(document.createElement("br"));
-    }
-    //Inserts the total cost. Limits to 2 decimal places
-    totalCostNode.appendChild(document.createTextNode(updateFromThisCart.TotalCost().toFixed(2)));
-}*/
+})(window.user, window.menu, window.cart || window.user, window.menu, window.cart);

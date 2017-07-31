@@ -1,24 +1,45 @@
-//Creates class of Food item with name and cost as required values upon instantiation
-function FoodItem(name, cost)
-{
-this.Name = name;
-this.Cost = cost;
-}
+window.cart = (function(){
 
-var cartApiUrl = 'http://localhost/MenuWebAPI/api/Cart';
-var xhr = new XMLHttpRequest()
+    var c = console
+    var CartAPIUrl = 'http://localhost/MenuWebAPI/api/Cart/';
+    var xhr = new XMLHttpRequest()
 
+    function LoadCart(callback) {
 
+        var promise = new Promise(function(resolve, reject) {
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4)
+                {
+                    if (xhr.status > 199 && xhr.status < 300) 
+                    {
+                        resolve(JSON.parse(xhr.responseText))
+                    }
+                    else
+                    {
+                        reject(Error(xhr.status + " " + xhr.statusText))
+                    }
+                }
 
-//Creates a desired item to populate the cart with a default quantity of 1
-function CartItem(desiredItem) {
-    this.DesiredItem=desiredItem;
-    this.Quantity=1;
-//Creates a subtotal for each item based on quantity
-    this.TotalItemCost = function () {
-        return this.Quantity * this.DesiredItem.Cost;
+            var data = xhr.responseText;
+            
+            }
+    
+
+            xhr.open("GET", CartAPIUrl, true);
+            xhr.send();
+
+        })
+
+        promise.then(function(data){
+            var obj = JSON.parse(data);
+            console.log(obj)
+            callback(obj);
+        })
+    }
+
+    return{
+    LoadCart:LoadCart
     };
-}
 
 
 
@@ -26,11 +47,6 @@ function CartItem(desiredItem) {
 function Shopper(shopperName){
     document.getElementById("shopperName").appendChild(document.createTextNode(shopperName))
 }
-
-//Creates an empty cart array
-function Cart() {
-
-this.CartData = []
 
 /*    if (xhr.readyState == 4 && xhr.status == 200) 
         {
@@ -46,14 +62,10 @@ this.CartData = []
     xhr.open("GET", http://localhost/MenuWebAPI/api/Cart/GetTotal, true);
     xhr.send();
 */
-/*Creates an empty cart array
-function Cart(returnedArray) {
-    this.CartData = (returnedArray);
-    */
 
 
 //Adds an item to the cart
-    this.AddCartData = function (newCartItem) {
+this.AddCartData = function (newCartItem) {
         //Sets the index of where the desired item is in the cart
         var Item = this.CartData.find(function (searchedCartItem)
         {
@@ -63,14 +75,14 @@ function Cart(returnedArray) {
         //If the item is not found, the returned value is undefined. A new item is added to the array
         if (Item === undefined) {
 //            this.CartData.push(newCartItem);
-        xhr.open("POST", "http://localhost/MenuWebAPI/api/Cart/GetTotal", true)
+        xhr.open("POST", CartAPIUrl, true)
             }
 
 
         //If the item is found, it increases the count by 1.
         else {
 //            Item.Quantity++;
-        xhr.open("PUT", "http://localhost/MenuWebAPI/api/Cart/GetTotal", true)
+        xhr.open("PUT", CartAPIUrl, true)
             }
 
     };
@@ -93,13 +105,13 @@ function Cart(returnedArray) {
             if (item.Quantity > 1)
             {
 //                item.Quantity--;
-                xhr.open("POST", "http://localhost/MenuWebAPI/api/Cart/GetTotal", true)
+                xhr.open("POST", CartAPIUrl, true)
 
             }
             //Removes from cart entirely if 1 is in the cart at time of event
             else {
 //                this.CartData.splice(index,1);
-                xhr.open("POST", "http://localhost/MenuWebAPI/api/Cart/GetTotal", true)
+                xhr.open("POST", CartAPIUrl, true)
             }
         }
 
@@ -109,7 +121,7 @@ function Cart(returnedArray) {
 //Computes the total cost
     this.TotalCost = function () {
 
-        xhr.open('GET', 'http://localhost/MenuWebAPI/api/Cart/GetTotal', true)
+        xhr.open('GET', CartAPIUrl, true)
         xhr.responseType = 'json';
         xhr.onload = function() {
             if (xhr.status==200) {
@@ -126,7 +138,6 @@ function Cart(returnedArray) {
         // return Total;
 
     }
-}
 
 function updateCart() {
 
@@ -161,3 +172,4 @@ xhr.open("GET", "http://localhost/MenuWebAPI/api/Cart/LoadCart", true)
     //Inserts the total cost. Limits to 2 decimal places
     totalCostNode.appendChild(document.createTextNode(updateFromThisCart.TotalCost().toFixed(2)));
 }
+})
